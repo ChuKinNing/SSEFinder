@@ -11,9 +11,8 @@ urlpatterns = [
     path('locations/', views.LocationListView.as_view(), name='locations'),
     path('location/<int:pk>', views.LocationDetailView.as_view(), name='location-detail'),
     path('locations/create/', views.LocationView, name='location-create'),
-    # path('locations/create/', views.LocationCreate.as_view(), name='location-create'),
-    # path('locations/<int:pk>/update/', views.LocationUpdate.as_view(), name='location-update'),
     path('locations/<int:pk>/delete/', views.LocationDelete.as_view(), name='location-delete'),
     path('events/',views.EventListView.as_view(),name='events'),
     path('event/<int:pk>', views.EventDetailView.as_view(), name='event-detail'),
+    path('events/create/', views.EventCreate.as_view(), name='event-create'),
 ]

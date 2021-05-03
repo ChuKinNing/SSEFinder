@@ -119,3 +119,7 @@ class EventListView(generic.ListView):
 
 class EventDetailView(generic.DetailView):
     model = Event
+
+class EventCreate(CreateView):
+    model = Event
+    fields = '__all__'
