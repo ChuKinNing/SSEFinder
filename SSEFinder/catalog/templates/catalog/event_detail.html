@@ -1,0 +1,39 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Event: {{event.description}}</h1>
+  <p><strong>Place: </strong>{{event.location}}</p>
+  <p><strong>Date: </strong>{{event.date}}</p>
+  <p><strong>Address: </strong>{{event.location.address}}</p>
+  <button type="button" name="update_button"><a>Update</a></button>
+  <button type="button" name="update_button"><a>Delete</a></button>
+  <!-- <button type="button" name="update_button"><a href="{{case.pk}}/update/">Update</a></button> -->
+  <!-- <button type="button" name="update_button"><a href="{{case.pk}}/delete/">Delete</a></button> -->
+  <div style="margin-left:20px;margin-top:20px">
+      <h2>Related Cases</h2>
+      <hr>
+    {% if event.attend_set.all %}
+      <h5>Possible Infectors:</h5>
+      {% for copy in event.attend_set.all %}
+
+          {% if copy.status == 'a'%}
+            <!-- <p class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'b' %}text-danger{% else %}text-warning{% endif %}"> -->
+               <!-- {{ copy.get_status_display }}  -->
+            <p><strong>Case:</strong> <a href="{{ copy.case.get_absolute_url }}">{{ copy.case }}</a></p>
+            <!-- <p><strong>Event:</strong> {{ copy.event.description }}</p>
+            <p><strong>Event details:</strong> {{ copy.event }}</p> -->
+          {% endif %}
+
+      {% endfor %}
+      <hr>
+      <h5>Possible Infected Cases:</h5>
+      {% for copy in event.attend_set.all %}
+        {% if copy.status == 'b'%}
+          <p><strong>Case:</strong> <a href="{{ copy.case.get_absolute_url }}">{{ copy.case }}</a></p>
+        {% endif %}
+      {% endfor %}
+      {% else %}
+        <p>No possible cases joined this event.</p>
+    {% endif %}
+    </div>
+{% endblock %}

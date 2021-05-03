@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+{% if name %}
+<h1>Successfully retrieved information of Location from API</h1>
+<h1>Location name: {{ name }}</h1>
+
+<p><strong>Venue:</strong> {{ venue_location }}</p>
+<p><strong>Address:</strong> {{ address }}</p>
+<p><strong>X-coordinate:</strong> {{ x_coordination }}</p>
+<p><strong>Y-coordinate:</strong> {{ y_coordination }}</p>
+{% else %}
+  <h1>Retrieve of information of Location from API is FAILED!</h1>
+{% endif %}
+
+{% endblock %}

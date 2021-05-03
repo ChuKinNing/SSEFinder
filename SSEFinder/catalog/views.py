@@ -7,6 +7,17 @@ from django.urls import reverse_lazy
 import requests
 from .forms import LocationForm
 
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.http import HttpResponse
+
+import requests
+import json
+import pprint
+import sys
+from datetime import date, timedelta
+
 
 # Create your views here.
 def index(request):
@@ -50,25 +61,61 @@ class LocationListView(generic.ListView):
 class LocationDetailView(generic.DetailView):
     model = Location
 
-# class LocationCreate(CreateView):
-#     model = Location
-#     fields = ['name']
+class LocationCreate(CreateView):
+    model = Location
+    fields = ['name']
 
 
-def location_view(request):
+def LocationView(request):
     form = LocationForm(None)
-    if request.method == 'POST' in request.POST:
-        form = LocationForm(request.POST)
+    if request.method == 'POST':
+        form = LocationForm(request.POST or None)
         if form.is_valid():
-            form.save()
-            # Location.objects.create()
-    context = ({'form':form})
-    return render(request, 'location_form.html', context = context)
+            name = form.cleaned_data['name']
+            venue_location = form.cleaned_data['venue_location']
+            try:
+                venue_location.replace(" ", "%20")
+                url = "https://geodata.gov.hk/gs/api/v1.0.0/locationSearch?q=" + venue_location
+                response = requests.get(url)
+                case_data = []
+                if response.status_code == 200:
+                    retrieved_data = json.loads(response.text)
+                    extracted_data = retrieved_data
+                    if len(extracted_data) > 1 or len(extracted_data) == 0:
+                         context = {}
+                         return render(request, 'location_after_input.html', context = context)
+                    else:
+                        extracted_data = retrieved_data[0]
+                        # if len(extracted_data) > 1:
+                        #     return render(request, 'location_after_input.html', context = context)
+                        context = {
+                            "name": name,
+                            "address": extracted_data["addressEN"],
+                            "venue_location": extracted_data["nameEN"],
+                            "x_coordination": extracted_data["x"],
+                            "y_coordination": extracted_data["y"],
+                                }
+                        location = Location.objects.create(**context)
+                        return render(request, 'location_after_input.html', context = context)
+            except:
+                context = {}
+                return render(request, 'location_after_input.html', context = context)
+    else:
+        api_response = None
+        context = {
+        'form':form,
+        }
+        return render(request, 'location_form.html', context = context)
 
-# class LocationUpdate(UpdateView):
-#     model = Location
-#     fields = 'name'
+
+
 
 class LocationDelete(DeleteView):
     model = Location
     success_url = reverse_lazy('locations')
+
+class EventListView(generic.ListView):
+    model = Event
+
+class EventDetailView(generic.DetailView):
+    model = Event

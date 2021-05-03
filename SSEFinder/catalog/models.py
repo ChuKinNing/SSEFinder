@@ -29,17 +29,17 @@ class Case(models.Model):
 
 class Location(models.Model):
     """Model for location"""
-    name = models.CharField(max_length=200, null=True, help_text='Enter name of the location')
+    name = models.CharField(max_length=1000, null=True, help_text='Enter name of the location')
     venue_location = models.CharField(max_length=200, null=True, help_text='Enter the location')
     address = models.CharField(max_length=200, null=True, help_text='Enter the location')
     x_coordination = models.FloatField(null=True, help_text='Enter X cordinate of the location')
     y_coordination = models.FloatField(null=True, help_text='Enter Y cordinate of the location')
 
     class Meta:
-        ordering = ['name']
+        ordering = ['venue_location']
 
     def __str__(self):
-        return self.name
+        return self.venue_location
 
     def get_absolute_url(self):
         """Returns the url to access a detail record for this location."""
@@ -80,8 +80,14 @@ class Event(models.Model):
     class Meta:
         ordering = ['location', 'date']
 
+    def get_absolute_url(self):
+        """Returns the url to access a detail record for this event."""
+        return reverse('event-detail', args=[str(self.id)])
+
     def __str__(self):
-        return f'{self.location.name} ({self.date})'
+        return f'{self.location.venue_location} ({self.date})'
+
+
 
 class SSE(models.Model):
     event = models.ForeignKey('Event', on_delete=models.SET_NULL, null=True)

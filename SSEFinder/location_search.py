@@ -5,7 +5,7 @@ import sys
 from datetime import date, timedelta
 
 # location = "Kam Lok Hin Chicken and Fish Pot"
-location = "wrsakifohsdafsfofonfsdao asfhos adoifsoadfjso j isafj "
+location = 'df'
 location.replace(" ", "%20")
 url = "https://geodata.gov.hk/gs/api/v1.0.0/locationSearch?q=" + location
 response = requests.get(url)
