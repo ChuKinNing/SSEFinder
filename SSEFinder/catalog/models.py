@@ -9,8 +9,8 @@ from django.urls import reverse
 # Create your models here.
 class Case(models.Model):
     """Model for Case."""
-    case_id = models.IntegerField(default=0, help_text='Unique ID of the case')
-    HKID = models.CharField(max_length=30, null=True, help_text='Enter Identity Document Number of the case (e.g. A123456(7) )')
+    case_id = models.IntegerField(default=0, help_text='Unique ID of the case', unique=True)
+    HKID = models.CharField(max_length=30, null=True, help_text='Enter Identity Document Number of the case (e.g. A123456(7) )', unique=True)
     name = models.CharField(max_length=100, null=True, help_text='Enter name of the patient (e.g. Chan Tai Man)')
     date_of_birth = models.DateField(null=True, help_text='Enter the date of birth of the patient')
     date_of_onset = models.DateField(null=True, help_text='Enter the date of onset of the patient')
