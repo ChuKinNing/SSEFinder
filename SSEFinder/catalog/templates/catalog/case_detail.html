@@ -1,0 +1,31 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Case number: {{ case.case_id }}</h1>
+
+  <p><strong>Patient name:</strong>{{ case.name }}</p> <!-- author detail link not yet defined -->
+  <p><strong>HKID:</strong> {{ case.HKID }}</p>
+  <p><strong>Date of Birth:</strong> {{ case.date_of_birth }}</p>
+  <p><strong>Date of Onset:</strong> {{ case.date_of_onset }}</p>
+  <p><strong>Date of Confirmation:</strong> {{ case.date_of_confirmed }}</p>
+  <button type="button" name="update_button"><a href="{{case.pk}}/update/">Update</a></button>
+  <button type="button" name="update_button"><a href="{{case.pk}}/delete/">Delete</a></button>
+
+  <div style="margin-left:20px;margin-top:20px">
+      <h4>Events Attended</h4>
+
+    {% if case.attend_set.all %}
+      {% for copy in case.attend_set.all %}
+        <hr>
+        <p class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'b' %}text-danger{% else %}text-warning{% endif %}">
+          {{ copy.get_status_display }}
+        </p>
+        <p><strong>Case:</strong> {{ copy.case }}</p>
+        <p><strong>Event:</strong> {{ copy.event }}</p>
+        <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
+      {% endfor %}
+      {% else %}
+        <p>No event is joined.</p>
+    {% endif %}
+    </div>
+  {% endblock %}

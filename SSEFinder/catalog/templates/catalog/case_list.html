@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Case List</h1>
+  {% if case_list %}
+  <ul>
+    {% for case in case_list %}
+      <li>
+        <a href="{{ case.get_absolute_url }}">Case ID: {{ case.case_id }}</a> ({{case.name}})
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no cases in SSE Finder.</p>
+  {% endif %}
+{% endblock %}
