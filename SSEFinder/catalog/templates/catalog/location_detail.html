@@ -16,7 +16,7 @@
     {% if location.event_set.all %}
       {% for copy in location.event_set.all %}
         <hr>
-        <p><strong>Description:</strong> {{ copy.description }}</p>
+        <p><strong>Description:</strong> <a href="{{ copy.get_absolute_url }}">{{ copy.description }}</a></p>
         <p><strong>Date:</strong> {{ copy.date }}</p>
         <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
       {% endfor %}

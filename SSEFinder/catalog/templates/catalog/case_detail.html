@@ -20,8 +20,8 @@
         <p class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'b' %}text-danger{% else %}text-warning{% endif %}">
           {{ copy.get_status_display }}
         </p>
-        <p><strong>Case:</strong> {{ copy.case }}</p>
-        <p><strong>Event:</strong> {{ copy.event }}</p>
+        <!-- <p><strong>Case:</strong> {{ copy.case }}</p> -->
+        <p><strong>Event:</strong> <a href="{{ copy.event.get_absolute_url }}">{{ copy.event }}</p>
         <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
       {% endfor %}
       {% else %}
