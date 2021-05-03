@@ -41,6 +41,11 @@ class Location(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        """Returns the url to access a detail record for this location."""
+        return reverse('location-detail', args=[str(self.id)])
+
+
 class Attend(models.Model):
     case = models.ForeignKey('Case', on_delete=models.SET_NULL, null=True)
     event = models.ForeignKey('Event', on_delete=models.SET_NULL, null=True)
@@ -67,16 +72,16 @@ class Attend(models.Model):
         return f'{self.case.case_id} ({self.event.event_name})'
 
 class Event(models.Model):
-    event_name = models.CharField(max_length=200, null=True, help_text='Enter name of the event')
+    # event_name = models.CharField(max_length=200, null=True, help_text='Enter name of the event')
     location = models.ForeignKey('Location', on_delete=models.SET_NULL, null=True)
     description = models.TextField(null=True)
     date = models.DateField(null=True, help_text='Date of the event')
 
     class Meta:
-        ordering = ['event_name', 'location', 'date']
+        ordering = ['location', 'date']
 
     def __str__(self):
-        return f'{self.event_name} ({self.location.name})'
+        return f'{self.location.name} ({self.date})'
 
 class SSE(models.Model):
     event = models.ForeignKey('Event', on_delete=models.SET_NULL, null=True)
@@ -85,4 +90,4 @@ class SSE(models.Model):
         ordering = ['event']
 
     def __str__(self):
-        return self.event.event_name
+        return f'{self.event.location.name} ({self.event.date})'

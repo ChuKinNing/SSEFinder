@@ -1,0 +1,13 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <form action="" method="post">
+    {% csrf_token %}
+    {% for field in form %}
+    <table>
+        <p>{{field}}</p>
+    </table>
+    {% endfor %}
+    <input type="submit" value="Submit">
+  </form>
+{% endblock %}

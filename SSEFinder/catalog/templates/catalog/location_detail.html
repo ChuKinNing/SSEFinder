@@ -1,0 +1,27 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Location name: {{ location.name }}</h1>
+
+  <p><strong>Venue:</strong> {{ location.venue_location }}</p>
+  <p><strong>Address:</strong> {{ location.address }}</p>
+  <p><strong>X-coordinate:</strong> {{ location.x_coordination }}</p>
+  <p><strong>Y-coordinate:</strong> {{ location.y_coordination }}</p>
+  <!-- <button type="button" name="update_button"><a href="{{case.pk}}/update/">Update</a></button>
+  <button type="button" name="update_button"><a href="{{case.pk}}/delete/">Delete</a></button> -->
+
+  <div style="margin-left:20px;margin-top:20px">
+      <h4>Event(s) take place here:</h4>
+
+    {% if location.event_set.all %}
+      {% for copy in location.event_set.all %}
+        <hr>
+        <p><strong>Description:</strong> {{ copy.description }}</p>
+        <p><strong>Date:</strong> {{ copy.date }}</p>
+        <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
+      {% endfor %}
+      {% else %}
+        <p>No event takes place here.</p>
+    {% endif %}
+    </div>
+  {% endblock %}

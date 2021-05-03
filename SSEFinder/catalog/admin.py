@@ -6,11 +6,11 @@ from .models import Case, Location, Attend, Event, SSE
 # define the admin class
 @admin.register(Case)
 class CaseAdmin(admin.ModelAdmin):
-    list_display = ('case_id', 'HKID', 'name', 'date_of_onset', 'date_of_confirmed')
+    list_display = ('case_id', 'HKID', 'name', 'date_of_birth','date_of_onset', 'date_of_confirmed')
 
 @admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):
-    list_display = ('name', 'x_coordination', 'y_coordination')
+    list_display = ('name', 'venue_location', 'address', 'x_coordination', 'y_coordination')
 
 @admin.register(Attend)
 class AttendAdmin(admin.ModelAdmin):
@@ -18,7 +18,7 @@ class AttendAdmin(admin.ModelAdmin):
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('event_name', 'location', 'date')
+    list_display = ('location', 'date', 'description')
 
 @admin.register(SSE)
 class SSEAdmin(admin.ModelAdmin):

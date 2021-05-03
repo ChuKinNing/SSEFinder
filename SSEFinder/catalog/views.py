@@ -4,6 +4,9 @@ from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 
+import requests
+from .forms import LocationForm
+
 
 # Create your views here.
 def index(request):
@@ -40,3 +43,32 @@ class CaseUpdate(UpdateView):
 class CaseDelete(DeleteView):
     model = Case
     success_url = reverse_lazy('cases')
+
+class LocationListView(generic.ListView):
+    model = Location
+
+class LocationDetailView(generic.DetailView):
+    model = Location
+
+# class LocationCreate(CreateView):
+#     model = Location
+#     fields = ['name']
+
+
+def location_view(request):
+    form = LocationForm(None)
+    if request.method == 'POST' in request.POST:
+        form = LocationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            # Location.objects.create()
+    context = ({'form':form})
+    return render(request, 'location_form.html', context = context)
+
+# class LocationUpdate(UpdateView):
+#     model = Location
+#     fields = 'name'
+
+class LocationDelete(DeleteView):
+    model = Location
+    success_url = reverse_lazy('locations')

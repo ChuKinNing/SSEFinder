@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Location List</h1>
+  {% if location_list %}
+  <ul>
+    {% for location in location_list %}
+      <li>
+        <a href="{{ location.get_absolute_url }}">Location name: {{ location.name }}</a> ({{location.venue_location}})
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no Location stored in SSE Finder.</p>
+  {% endif %}
+{% endblock %}

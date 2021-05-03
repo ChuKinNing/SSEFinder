@@ -8,4 +8,9 @@ urlpatterns = [
     path('case/create/', views.CaseCreate.as_view(), name='case-create'),
     path('case/<int:pk>/update/', views.CaseUpdate.as_view(), name='case-update'),
     path('case/<int:pk>/delete/', views.CaseDelete.as_view(), name='case-delete'),
+    path('locations/', views.LocationListView.as_view(), name='locations'),
+    path('location/<int:pk>', views.LocationDetailView.as_view(), name='location-detail'),
+    path('locations/create/', views.location_view, name='location-create'),
+    # path('locations/<int:pk>/update/', views.LocationUpdate.as_view(), name='location-update'),
+    path('locations/<int:pk>/delete/', views.LocationDelete.as_view(), name='location-delete'),
 ]
