@@ -26,6 +26,12 @@ def index(request):
     # return the HTML template index.html with the data in context
     return render(request, 'index.html', context=context)
 
+class EventListView(generic.ListView):
+    model = Event
+
+class EventDetailView(generic.DetailView):
+    model = Event
+
 class CaseListView(generic.ListView):
     model = Case
 

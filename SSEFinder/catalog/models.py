@@ -69,7 +69,7 @@ class Attend(models.Model):
         ordering = ['case', 'event', 'status']
 
     def __str__(self):
-        return f'{self.case.case_id} ({self.event.event_name})'
+        return f'{self.case.case_id}, {self.event.location} ({self.event.description})'
 
 class Event(models.Model):
     # event_name = models.CharField(max_length=200, null=True, help_text='Enter name of the event')
@@ -82,6 +82,10 @@ class Event(models.Model):
 
     def __str__(self):
         return f'{self.location.name} ({self.date})'
+
+    def get_absolute_url(self):
+        """Returns the url to access a detail record for this event."""
+        return reverse('event-detail', args=[str(self.id)])
 
 class SSE(models.Model):
     event = models.ForeignKey('Event', on_delete=models.SET_NULL, null=True)
