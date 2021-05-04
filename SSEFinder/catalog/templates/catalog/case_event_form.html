@@ -1,0 +1,27 @@
+<!-- Andrew branch 1.2 add event-->
+{% extends "base_generic.html" %}
+
+{% block content %}
+	<h1>Add Event</h1>
+	<h2>Personal information</h2>
+	<p><strong>Case number:</strong>{{case.case_id}}</p>
+	<p><strong>Patient name:</strong>{{ case.name }}</p> <!-- author detail link not yet defined -->
+	<p><strong>HKID:</strong> {{ case.HKID }}</p>
+	<p><strong>Date of Birth:</strong> {{ case.date_of_birth }}</p>
+	<p><strong>Date of Onset:</strong> {{ case.date_of_onset }}</p>
+	<p><strong>Date of Confirmation:</strong> {{ case.date_of_confirmed }}</p>
+	<button type="button" name="update_button"><a href="{{case.pk}}/update/">Update</a></button>
+	<button type="button" name="delete_button"><a href="{{case.pk}}/delete/">Delete</a></button>
+	
+	<form action = "" method = "post">
+		{% csrf_token %}
+		<table>
+			{{ form.as_table }}
+		</table>
+		<input type = "submit" value = "Submit">
+	</form>
+	
+	<button type = "button" name = "add_other"><a href = "{{case.pk}}/add-event/">Add Another Event</a></button>
+	<button type = "button" name = "view_event"><a href = "{{case.pk}}">View Event</a></button>
+	
+{% endblock %}
