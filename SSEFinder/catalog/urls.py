@@ -1,3 +1,4 @@
+# Andrew branch 1.2 add event
 from django.urls import path
 from . import views
 
@@ -8,6 +9,7 @@ urlpatterns = [
     path('case/create/', views.CaseCreate.as_view(), name='case-create'),
     path('case/<int:pk>/update/', views.CaseUpdate.as_view(), name='case-update'),
     path('case/<int:pk>/delete/', views.CaseDelete.as_view(), name='case-delete'),
+    path('case/<int:pk>/add-event', views.CaseAddEvent.as_view(), name = 'case-add-event')
     path('locations/', views.LocationListView.as_view(), name='locations'),
     path('location/<int:pk>', views.LocationDetailView.as_view(), name='location-detail'),
     path('locations/create/', views.LocationView, name='location-create'),
