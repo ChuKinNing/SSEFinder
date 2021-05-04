@@ -69,7 +69,7 @@ class Attend(models.Model):
         ordering = ['case', 'event', 'status']
 
     def __str__(self):
-        return f'{self.case.case_id} ({self.event.event_name})'
+        return f'{self.case.case_id} ({self.event.location} on {self.event.date})'
 
 class Event(models.Model):
     # event_name = models.CharField(max_length=200, null=True, help_text='Enter name of the event')

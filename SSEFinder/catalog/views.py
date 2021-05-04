@@ -5,7 +5,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 
 import requests
-from .forms import LocationForm
+from .forms import LocationForm, AttendForm
 
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
@@ -66,7 +66,6 @@ class LocationCreate(CreateView):
     model = Location
     fields = ['name']
 
-
 def LocationView(request):
     form = LocationForm(None)
     # when the request is post
@@ -111,11 +110,9 @@ def LocationView(request):
         }
         return render(request, 'location_form.html', context = context)
 
-
-
-
 class LocationDelete(DeleteView):
     model = Location
+    # remove relatate object to Foreign key object
     Event.objects.filter(location=None).delete()
     success_url = reverse_lazy('locations')
 
@@ -138,3 +135,49 @@ class EventDelete(DeleteView):
     SSE.objects.filter(event=None).delete()
     Attend.objects.filter(event=None).delete()
     success_url = reverse_lazy('events')
+
+def AddAttend(request):
+    form = AttendForm(None)
+    context = {
+    'form':form,
+    }
+    # when the request is post
+    if request.method == 'POST':
+        form = AttendForm(request.POST or None)
+        if form.is_valid():
+            case_selected = form.cleaned_data['case']
+            event_selected = form.cleaned_data['event']
+
+            # set initial status = none
+            calculated_status='d'
+
+            # distinguish the role of the case in the event
+
+            # incubation period
+            if (event_selected.date >= (case_selected.date_of_onset - timedelta(days=14))) and (event_selected.date <= (case_selected.date_of_onset - timedelta(days=2))):
+                calculated_status = 'b'
+
+            # infectious period
+            if (event_selected.date >= (case_selected.date_of_onset - timedelta(days=3))) and (event_selected.date <= case_selected.date_of_confirmed):
+                calculated_status = 'a'
+
+            # both
+            if (event_selected.date >= (case_selected.date_of_onset - timedelta(days=14))) and (event_selected.date <= (case_selected.date_of_onset - timedelta(days=2))) and (event_selected.date >= (case_selected.date_of_onset - timedelta(days=3))) and (event_selected.date <= case_selected.date_of_confirmed):
+                calculated_status = 'c'
+            new_attend = Attend.objects.create(case=case_selected, event=event_selected, status=calculated_status)
+
+            context = {}
+            return render(request, 'attend_success.html', context = context)
+        # if the form is not valid, aka has exception
+        else:
+            context = {
+            'form':form,
+            }
+            return render(request, 'attend_form.html', context = context)
+    # when the reqeust is get
+    else:
+        context = {
+        'form':form,
+        }
+        return render(request, 'attend_form.html', context = context)
+    return render(request, 'attend_form.html', context = context)

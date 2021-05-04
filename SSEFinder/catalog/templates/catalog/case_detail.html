@@ -9,7 +9,7 @@
   <p><strong>Date of Onset:</strong> {{ case.date_of_onset }}</p>
   <p><strong>Date of Confirmation:</strong> {{ case.date_of_confirmed }}</p>
   <button type="button" name="update_button"><a href="{{case.pk}}/update/">Update</a></button>
-  <button type="button" name="update_button"><a href="{{case.pk}}/delete/">Delete</a></button>
+  <button type="button" name="delete_button"><a href="{{case.pk}}/delete/">Delete</a></button>
 
   <div style="margin-left:20px;margin-top:20px">
       <h4>Events Attended</h4>
@@ -20,9 +20,10 @@
         <p class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'b' %}text-danger{% else %}text-warning{% endif %}">
           {{ copy.get_status_display }}
         </p>
-        <p><strong>Case:</strong> {{ copy.case }}</p>
+        <!-- <p><strong>Case:</strong> {{ copy.case }}</p> -->
         <p><strong>Event:</strong> {{ copy.event }}</p>
-        <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
+        <p><strong>Location name:</strong> {{ copy.event.location.name }} </p>
+        <!-- <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p> -->
       {% endfor %}
       {% else %}
         <p>No event is joined.</p>
