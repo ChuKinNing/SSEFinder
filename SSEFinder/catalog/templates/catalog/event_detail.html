@@ -18,7 +18,7 @@
       <h5>Possible Infectors:</h5>
       {% for copy in event.attend_set.all %}
 
-          {% if copy.status == 'a'%}
+          {% if copy.status == 'a' or copy.status == 'c' %}
             <!-- <p class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'b' %}text-danger{% else %}text-warning{% endif %}"> -->
                <!-- {{ copy.get_status_display }}  -->
             <p><strong>Case:</strong> <a href="{{ copy.case.get_absolute_url }}">{{ copy.case }}</a></p>
@@ -30,7 +30,7 @@
       <hr>
       <h5>Possible Infected Cases:</h5>
       {% for copy in event.attend_set.all %}
-        {% if copy.status == 'b'%}
+        {% if copy.status == 'b' or copy.status == 'c' %}
           <p><strong>Case:</strong> <a href="{{ copy.case.get_absolute_url }}">{{ copy.case }}</a></p>
         {% endif %}
       {% endfor %}

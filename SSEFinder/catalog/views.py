@@ -54,6 +54,7 @@ class CaseUpdate(UpdateView):
 class CaseDelete(DeleteView):
     model = Case
     Attend.objects.filter(case=None).delete()
+    Attend.objects.filter(event=None).delete()
     success_url = reverse_lazy('cases')
 
 class LocationListView(generic.ListView):
@@ -114,6 +115,8 @@ class LocationDelete(DeleteView):
     model = Location
     # remove relatate object to Foreign key object
     Event.objects.filter(location=None).delete()
+    Attend.objects.filter(event=None).delete()
+    SSE.objects.filter(event=None).delete()
     success_url = reverse_lazy('locations')
 
 class EventListView(generic.ListView):
