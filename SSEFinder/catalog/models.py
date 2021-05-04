@@ -1,130 +1,100 @@
-# Andrew branch 1.2 add event
-from django.shortcuts import render
-from catalog.models import Case, Attend, Event, Location
-from django.views import generic
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
-
-import requests
-from .forms import LocationForm
-
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect
+from django.db import models
+import uuid # required for unique attend
 from django.urls import reverse
-from django.http import HttpResponse
 
-import requests
-import json
-import pprint
-import sys
-from datetime import date, timedelta
+# redundunt, because django already provided today, but can take it as reference for date format
+# from datetime import date
+# today_date = date.today().strftime('%Y-%m-%d')
 
+# Create your models here.
+class Case(models.Model):
+    """Model for Case."""
+    case_id = models.IntegerField(default=0, help_text='Unique ID of the case', unique=True)
+    HKID = models.CharField(max_length=30, null=True, help_text='Enter Identity Document Number of the case (e.g. A123456(7) )', unique=True)
+    name = models.CharField(max_length=100, null=True, help_text='Enter name of the patient (e.g. Chan Tai Man)')
+    date_of_birth = models.DateField(null=True, help_text='Enter the date of birth of the patient')
+    date_of_onset = models.DateField(null=True, help_text='Enter the date of onset of the patient')
+    date_of_confirmed = models.DateField(null=True, help_text='Enter the date of positive confirmation of the patient')
 
-# Create your views here.
-def index(request):
-    """View function for home page of the site"""
+    class Meta:
+        ordering = ['case_id']
 
-    # Generate counts of some of the main objects
-    num_case = Case.objects.all().count()
-    num_location = Location.objects.all().count()
-    num_event = Event.objects.all().count()
+    def __str__(self):
+        """String for representing the Case"""
+        return f'{self.case_id}'
 
-    context = {
-        'num_case': num_case,
-        'num_location': num_location,
-        'num_event': num_event,
-    }
+    def get_absolute_url(self):
+        """Returns the url to access a detail record for this case."""
+        return reverse('case-detail', args=[str(self.id)])
 
-    # return the HTML template index.html with the data in context
-    return render(request, 'index.html', context=context)
+class Location(models.Model):
+    """Model for location"""
+    name = models.CharField(max_length=1000, null=True, help_text='Enter name of the location')
+    venue_location = models.CharField(max_length=200, null=True, help_text='Enter the location')
+    address = models.CharField(max_length=200, null=True, help_text='Enter the address')
+    x_coordination = models.FloatField(null=True, help_text='Enter X cordinate of the location')
+    y_coordination = models.FloatField(null=True, help_text='Enter Y cordinate of the location')
 
-class CaseListView(generic.ListView):
-    model = Case
+    class Meta:
+        ordering = ['venue_location']
 
-class CaseDetailView(generic.DetailView):
-    model = Case
+    def __str__(self):
+        return self.venue_location
 
-class CaseCreate(CreateView):
-    model = Case
-    fields = '__all__'
-
-class CaseUpdate(UpdateView):
-    model = Case
-    fields = '__all__'
-
-class CaseDelete(DeleteView):
-    model = Case
-    success_url = reverse_lazy('cases')
-    
-class CaseAddEvent (CreateView):
-    model = Attend
-    fields = '__all__'
-
-class LocationListView(generic.ListView):
-    model = Location
-
-class LocationDetailView(generic.DetailView):
-    model = Location
-
-class LocationCreate(CreateView):
-    model = Location
-    fields = ['name']
+    def get_absolute_url(self):
+        """Returns the url to access a detail record for this location."""
+        return reverse('location-detail', args=[str(self.id)])
 
 
-def LocationView(request):
-    form = LocationForm(None)
-    if request.method == 'POST':
-        form = LocationForm(request.POST or None)
-        if form.is_valid():
-            name = form.cleaned_data['name']
-            venue_location = form.cleaned_data['venue_location']
-            try:
-                venue_location.replace(" ", "%20")
-                url = "https://geodata.gov.hk/gs/api/v1.0.0/locationSearch?q=" + venue_location
-                response = requests.get(url)
-                case_data = []
-                if response.status_code == 200:
-                    retrieved_data = json.loads(response.text)
-                    extracted_data = retrieved_data
-                    if len(extracted_data) > 1 or len(extracted_data) == 0:
-                         context = {}
-                         return render(request, 'location_after_input.html', context = context)
-                    else:
-                        extracted_data = retrieved_data[0]
-                        # if len(extracted_data) > 1:
-                        #     return render(request, 'location_after_input.html', context = context)
-                        context = {
-                            "name": name,
-                            "address": extracted_data["addressEN"],
-                            "venue_location": extracted_data["nameEN"],
-                            "x_coordination": extracted_data["x"],
-                            "y_coordination": extracted_data["y"],
-                                }
-                        location = Location.objects.create(**context)
-                        return render(request, 'location_after_input.html', context = context)
-            except:
-                context = {}
-                return render(request, 'location_after_input.html', context = context)
-    else:
-        api_response = None
-        context = {
-        'form':form,
-        }
-        return render(request, 'location_form.html', context = context)
+class Attend(models.Model):
+    case = models.ForeignKey('Case', on_delete=models.SET_NULL, null=True)
+    event = models.ForeignKey('Event', on_delete=models.SET_NULL, null=True)
+
+    ROLE = (
+        ('a', 'possible infector'),
+        ('b', 'possibly infected'),
+        ('c', 'both'),
+        ('d', 'none')
+    )
+
+    status = models.CharField(
+        max_length=1,
+        choices=ROLE,
+        blank=True,
+        default='d',
+        help_text="Patient's role in event",
+    )
+
+    class Meta:
+        ordering = ['case', 'event', 'status']
+
+    def __str__(self):
+        return f'{self.case.case_id} ({self.event.event_name})'
+
+class Event(models.Model):
+    # event_name = models.CharField(max_length=200, null=True, help_text='Enter name of the event')
+    location = models.ForeignKey('Location', on_delete=models.SET_NULL, null=True)
+    description = models.TextField(null=True)
+    date = models.DateField(null=True, help_text='Date of the eventm e.g. YYYY-MM-DD')
+
+    class Meta:
+        ordering = ['location', 'date']
+
+    def get_absolute_url(self):
+        """Returns the url to access a detail record for this event."""
+        return reverse('event-detail', args=[str(self.id)])
+
+    def __str__(self):
+        return f'{self.location.venue_location} ({self.date})'
 
 
 
 
-class LocationDelete(DeleteView):
-    model = Location
-    success_url = reverse_lazy('locations')
+class SSE(models.Model):
+    event = models.ForeignKey('Event', on_delete=models.SET_NULL, null=True)
 
-class EventListView(generic.ListView):
-    model = Event
+    class Meta:
+        ordering = ['event']
 
-class EventDetailView(generic.DetailView):
-    model = Event
-
-class EventCreate(CreateView):
-    model = Event
-    fields = '__all__'
+    def __str__(self):
+        return f'{self.event.location.name} ({self.event.date})'
