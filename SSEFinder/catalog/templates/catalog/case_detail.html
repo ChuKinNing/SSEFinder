@@ -1,3 +1,5 @@
+<!-- Andrew branch 1.2 add event -->
+
 {% extends "base_generic.html" %}
 
 {% block content %}
@@ -9,7 +11,8 @@
   <p><strong>Date of Onset:</strong> {{ case.date_of_onset }}</p>
   <p><strong>Date of Confirmation:</strong> {{ case.date_of_confirmed }}</p>
   <button type="button" name="update_button"><a href="{{case.pk}}/update/">Update</a></button>
-  <button type="button" name="update_button"><a href="{{case.pk}}/delete/">Delete</a></button>
+  <button type="button" name="delete_button"><a href="{{case.pk}}/delete/">Delete</a></button>
+  <button type = "button" name = "add_event_button"><a href = "{{case.pk}}/add-event/">Add Event</a></button>
 
   <div style="margin-left:20px;margin-top:20px">
       <h4>Events Attended</h4>
