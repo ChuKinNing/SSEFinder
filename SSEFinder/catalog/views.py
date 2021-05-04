@@ -1,3 +1,4 @@
+# Andrew branch 1.2 add event
 from django.shortcuts import render
 from catalog.models import Case, Attend, Event, Location
 from django.views import generic
@@ -54,6 +55,10 @@ class CaseUpdate(UpdateView):
 class CaseDelete(DeleteView):
     model = Case
     success_url = reverse_lazy('cases')
+    
+class CaseAddEvent (CreateView):
+    model = Attend
+    fields = '__all__'
 
 class LocationListView(generic.ListView):
     model = Location
