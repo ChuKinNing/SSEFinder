@@ -89,6 +89,7 @@ class Event(models.Model):
 
 
 
+
 class SSE(models.Model):
     event = models.ForeignKey('Event', on_delete=models.SET_NULL, null=True)
 

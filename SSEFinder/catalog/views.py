@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from catalog.models import Case, Attend, Event, Location
+from catalog.models import Case, Attend, Event, Location, SSE
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
@@ -53,6 +53,7 @@ class CaseUpdate(UpdateView):
 
 class CaseDelete(DeleteView):
     model = Case
+    Attend.objects.filter(case=None).delete()
     success_url = reverse_lazy('cases')
 
 class LocationListView(generic.ListView):
@@ -68,6 +69,7 @@ class LocationCreate(CreateView):
 
 def LocationView(request):
     form = LocationForm(None)
+    # when the request is post
     if request.method == 'POST':
         form = LocationForm(request.POST or None)
         if form.is_valid():
@@ -78,16 +80,17 @@ def LocationView(request):
                 url = "https://geodata.gov.hk/gs/api/v1.0.0/locationSearch?q=" + venue_location
                 response = requests.get(url)
                 case_data = []
+                # data retrieve is successful
                 if response.status_code == 200:
                     retrieved_data = json.loads(response.text)
                     extracted_data = retrieved_data
+                    # more than one location or zero location is returned
                     if len(extracted_data) > 1 or len(extracted_data) == 0:
                          context = {}
                          return render(request, 'location_after_input.html', context = context)
+                    # correct location is returned (only one)
                     else:
                         extracted_data = retrieved_data[0]
-                        # if len(extracted_data) > 1:
-                        #     return render(request, 'location_after_input.html', context = context)
                         context = {
                             "name": name,
                             "address": extracted_data["addressEN"],
@@ -97,6 +100,7 @@ def LocationView(request):
                                 }
                         location = Location.objects.create(**context)
                         return render(request, 'location_after_input.html', context = context)
+            # when the request is get
             except:
                 context = {}
                 return render(request, 'location_after_input.html', context = context)
@@ -112,6 +116,7 @@ def LocationView(request):
 
 class LocationDelete(DeleteView):
     model = Location
+    Event.objects.filter(location=None).delete()
     success_url = reverse_lazy('locations')
 
 class EventListView(generic.ListView):
@@ -123,3 +128,13 @@ class EventDetailView(generic.DetailView):
 class EventCreate(CreateView):
     model = Event
     fields = '__all__'
+
+class EventUpdate(UpdateView):
+    model = Event
+    fields = '__all__'
+
+class EventDelete(DeleteView):
+    model = Event
+    SSE.objects.filter(event=None).delete()
+    Attend.objects.filter(event=None).delete()
+    success_url = reverse_lazy('events')

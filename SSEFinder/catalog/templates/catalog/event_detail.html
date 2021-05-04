@@ -9,10 +9,8 @@
   <p><strong>Venue:</strong> {{ event.location.venue_location }}</p>
   <p><strong>X-coordinate:</strong> {{ event.location.x_coordination }}</p>
   <p><strong>Y-coordinate:</strong> {{ event.location.y_coordination }}</p>
-  <button type="button" name="update_button"><a>Update</a></button>
-  <button type="button" name="update_button"><a>Delete</a></button>
-  <!-- <button type="button" name="update_button"><a href="{{case.pk}}/update/">Update</a></button> -->
-  <!-- <button type="button" name="update_button"><a href="{{case.pk}}/delete/">Delete</a></button> -->
+  <button type="button" name="update_button"><a href="{{event.pk}}/update/">Update</a></button>
+  <button type="button" name="update_button"><a href="{{event.pk}}/delete/">Delete</a></button>
   <div style="margin-left:20px;margin-top:20px">
       <h2>Related Cases</h2>
       <hr>
