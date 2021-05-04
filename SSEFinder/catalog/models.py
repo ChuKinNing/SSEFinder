@@ -31,7 +31,7 @@ class Location(models.Model):
     """Model for location"""
     name = models.CharField(max_length=1000, null=True, help_text='Enter name of the location')
     venue_location = models.CharField(max_length=200, null=True, help_text='Enter the location')
-    address = models.CharField(max_length=200, null=True, help_text='Enter the location')
+    address = models.CharField(max_length=200, null=True, help_text='Enter the address')
     x_coordination = models.FloatField(null=True, help_text='Enter X cordinate of the location')
     y_coordination = models.FloatField(null=True, help_text='Enter Y cordinate of the location')
 
@@ -75,7 +75,7 @@ class Event(models.Model):
     # event_name = models.CharField(max_length=200, null=True, help_text='Enter name of the event')
     location = models.ForeignKey('Location', on_delete=models.SET_NULL, null=True)
     description = models.TextField(null=True)
-    date = models.DateField(null=True, help_text='Date of the event')
+    date = models.DateField(null=True, help_text='Date of the eventm e.g. YYYY-MM-DD')
 
     class Meta:
         ordering = ['location', 'date']
