@@ -8,6 +8,7 @@
   <p><strong>X-coordinate:</strong> {{ location.x_coordination }}</p>
   <p><strong>Y-coordinate:</strong> {{ location.y_coordination }}</p>
   <button type="button" name="update_button"><a href="{{location.pk}}/delete/">Delete</a></button>
+  <button type="button" name="add_event_button"><a href="{% url 'event-create' %}">Add Location to Event</a></button>
 
   <div style="margin-left:20px;margin-top:20px">
       <h4>Event(s) take place here:</h4>
@@ -15,9 +16,10 @@
     {% if location.event_set.all %}
       {% for copy in location.event_set.all %}
         <hr>
+        <p><strong>Event:</strong> <a href="{{ copy.get_absolute_url }}">{{ copy }} </a></p>
         <p><strong>Description:</strong> {{ copy.description }}</p>
         <p><strong>Date:</strong> {{ copy.date }}</p>
-        <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
+        <!-- <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p> -->
       {% endfor %}
       {% else %}
         <p>No event takes place here.</p>

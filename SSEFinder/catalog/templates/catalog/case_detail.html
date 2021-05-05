@@ -10,6 +10,7 @@
   <p><strong>Date of Confirmation:</strong> {{ case.date_of_confirmed }}</p>
   <button type="button" name="update_button"><a href="{{case.pk}}/update/">Update</a></button>
   <button type="button" name="delete_button"><a href="{{case.pk}}/delete/">Delete</a></button>
+  <button type="button" name="add_attend_button"><a href="{% url 'attend-create' %}">Add Event to Case</a></button>
 
   <div style="margin-left:20px;margin-top:20px">
       <h4>Events Attended</h4>
@@ -21,7 +22,7 @@
           {{ copy.get_status_display }}
         </p>
         <!-- <p><strong>Case:</strong> {{ copy.case }}</p> -->
-        <p><strong>Event:</strong> {{ copy.event }}</p>
+        <p><strong>Event:</strong> <a href="{{ copy.event.get_absolute_url }}">{{ copy.event }} </a></p>
         <p><strong>Location name:</strong> {{ copy.event.location.name }} </p>
         <!-- <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p> -->
       {% endfor %}

@@ -2,15 +2,16 @@
 
 {% block content %}
   <h1>Event: {{event.description}}</h1>
-  <p><strong>Place: </strong>{{event.location}}</p>
+  <!-- <p><strong>Place: </strong>{{event.location}}</p> -->
   <p><strong>Date: </strong>{{event.date}}</p>
   <p><strong>Description: </strong>{{event.description}}</p>
   <p><strong>Address: </strong>{{event.location.address}}</p>
-  <p><strong>Venue:</strong> {{ event.location.venue_location }}</p>
+  <p><strong>Venue:</strong><a href="{{event.location.get_absolute_url }}"> {{ event.location.venue_location }} </a></p>
   <p><strong>X-coordinate:</strong> {{ event.location.x_coordination }}</p>
   <p><strong>Y-coordinate:</strong> {{ event.location.y_coordination }}</p>
   <button type="button" name="update_button"><a href="{{event.pk}}/update/">Update</a></button>
-  <button type="button" name="update_button"><a href="{{event.pk}}/delete/">Delete</a></button>
+  <button type="button" name="delete_button"><a href="{{event.pk}}/delete/">Delete</a></button>
+  <button type="button" name="add_attend_button"><a href="{% url 'attend-create' %}">Add Event to Case</a></button>
   <div style="margin-left:20px;margin-top:20px">
       <h2>Related Cases</h2>
       <hr>
