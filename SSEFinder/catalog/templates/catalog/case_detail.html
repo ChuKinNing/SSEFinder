@@ -23,7 +23,7 @@
         </p>
         <!-- <p><strong>Case:</strong> {{ copy.case }}</p> -->
         <p><strong>Event:</strong> <a href="{{ copy.event.get_absolute_url }}">{{ copy.event }} </a></p>
-        <p><strong>Location name:</strong> {{ copy.event.location.name }} </p>
+        <p><strong>Location name:</strong><a href="{{ copy.event.location.get_absolute_url }}"> {{ copy.event.location.name }}</a> </p>
         <!-- <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p> -->
       {% endfor %}
       {% else %}

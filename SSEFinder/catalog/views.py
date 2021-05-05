@@ -37,6 +37,8 @@ def index(request):
     # return the HTML template index.html with the data in context
     return render(request, 'index.html', context=context)
 
+# Case
+
 class CaseListView(generic.ListView):
     model = Case
 
@@ -56,6 +58,9 @@ class CaseDelete(DeleteView):
     Attend.objects.filter(case=None).delete()
     Attend.objects.filter(event=None).delete()
     success_url = reverse_lazy('cases')
+
+
+# Location
 
 class LocationListView(generic.ListView):
     model = Location
@@ -119,6 +124,8 @@ class LocationDelete(DeleteView):
     SSE.objects.filter(event=None).delete()
     success_url = reverse_lazy('locations')
 
+# Event
+
 class EventListView(generic.ListView):
     model = Event
 
@@ -138,6 +145,8 @@ class EventDelete(DeleteView):
     SSE.objects.filter(event=None).delete()
     Attend.objects.filter(event=None).delete()
     success_url = reverse_lazy('events')
+
+# Attend
 
 def AddAttend(request):
     form = AttendForm(None)
