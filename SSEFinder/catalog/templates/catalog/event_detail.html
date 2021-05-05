@@ -33,6 +33,8 @@
       {% for copy in event.attend_set.all %}
         {% if copy.status == 'b' or copy.status == 'c' %}
           <p><strong>Case:</strong> <a href="{{ copy.case.get_absolute_url }}">{{ copy.case }}</a></p>
+          <button type="button" name="delete_case_from_event_button"><a href= "case/{{copy.case.pk}}/delete/">Delete Case from Event</a></button>
+          <button type="button" name="update_case_from_event_button"><a href= "case/{{copy.case.pk}}/update/">Update Case from Event</a></button>
         {% endif %}
       {% endfor %}
       {% else %}
