@@ -5,7 +5,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 
 import requests
-from .forms import LocationForm, AttendForm
+from .forms import LocationForm, AttendForm, SseDateForm
 
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
@@ -17,6 +17,8 @@ import json
 import pprint
 import sys
 from datetime import date, timedelta
+
+from django.db.models import Q
 
 
 # Create your views here.
@@ -200,3 +202,41 @@ def AddAttend(request):
 class AttendDelete(DeleteView):
     model = Attend
     success_url = reverse_lazy('cases')
+
+def SelectSse(request):
+    form = SseDateForm(None)
+    context = {
+        'form': form,
+    }
+    if request.method == 'POST':
+        form = SseDateForm(request.POST or None)
+        if form.is_valid():
+            start_date = form.cleaned_data['start_date']
+            end_date = form.cleaned_data['end_date']
+            context = {
+                'start_date': form.cleaned_data['start_date'],
+                'end_date': form.cleaned_data['end_date']
+            }
+            events_in_period = Event.objects.filter(date__range=[start_date, end_date])
+            # initialize a list to contain desired query object from query set
+            sse=[]
+            for eventA in events_in_period:
+                count = Attend.objects.filter(Q(event=eventA,status='b')|Q(event=eventA,status='c')).count()
+                if count >= 6:
+                    print(eventA)
+                    sse.append(eventA)
+#
+            print(sse)
+            context['SSE'] = sse
+
+            return render(request, 'sse_result.html', context)
+
+        # input is invalid
+        else:
+            context = {
+            'form':form,
+            }
+            return render(request, 'attend_form.html', context = context)
+    else:
+        return render(request, 'sse_select.html', context)
+    return render(request, 'sse_select.html', context)

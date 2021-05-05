@@ -8,6 +8,8 @@ from datetime import datetime, timedelta
 from datetime import date
 from django.core.exceptions import ValidationError
 
+from django import forms
+
 class LocationForm(ModelForm):
     class Meta:
         model = Location
@@ -44,3 +46,7 @@ class AttendForm(ModelForm):
             'case': _('Choose Case'),
             'event': _('Choose Event')
         }
+
+class SseDateForm(forms.Form):
+    start_date = forms.DateField(help_text="Enter a beginning date of the desired period")
+    end_date = forms.DateField(help_text="Enter a ending date of the desired period")

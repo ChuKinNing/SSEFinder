@@ -27,4 +27,6 @@ urlpatterns = [
     path('attend/create/', views.AddAttend, name='attend-create'),
     path('case/attend/<int:pk>/delete/', views.AttendDelete.as_view(), name='attend-delete'),
     path('event/attend/<int:pk>/delete/', views.AttendDelete.as_view(), name='attend-delete'),
+    # SSE
+    path('sse/select/', views.SelectSse, name = 'sse-select'),
 ]

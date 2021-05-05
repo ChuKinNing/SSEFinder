@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  {%if SSE%}
+    <h1>SSE in period between {{start_date}} and {{end_date}}:</h1>
+    <br><br>
+    <ul>
+      {% for event in SSE %}
+        <li>
+          <p><a href="{{ event.get_absolute_url }}">{{event}}</a></p>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <h1>There is no SSE between{{start_date}} and {{end_date}}!!!</h1>
+  {% endif %}
+{% endblock %}
