@@ -10,7 +10,6 @@ urlpatterns = [
     path('case/<int:pk>/update/', views.CaseUpdate.as_view(), name='case-update'),
     path('case/<int:pk>/delete/', views.CaseDelete.as_view(), name='case-delete'),
     path('event/case/<int:pk>/update/', views.CaseUpdate.as_view(), name='case-update'),
-    path('event/case/<int:pk>/delete/', views.CaseDelete.as_view(), name='case-delete'),
     # location
     path('locations/', views.LocationListView.as_view(), name='locations'),
     path('location/<int:pk>', views.LocationDetailView.as_view(), name='location-detail'),
@@ -23,6 +22,7 @@ urlpatterns = [
     path('event/<int:pk>/update/', views.EventUpdate.as_view(), name='event-update'),
     path('case/event/<int:pk>/update/', views.EventUpdate.as_view(), name='event-update'),
     path('event/<int:pk>/delete/', views.EventDelete.as_view(), name='event-delete'),
+    path('location/event/<int:pk>/update/', views.EventUpdate.as_view(), name='event-update'),
     # attend
     path('attend/create/', views.AddAttend, name='attend-create'),
     path('case/attend/<int:pk>/delete/', views.AttendDelete.as_view(), name='attend-delete'),

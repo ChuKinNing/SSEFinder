@@ -19,6 +19,7 @@
         <p><strong>Event:</strong> <a href="{{ copy.get_absolute_url }}">{{ copy }} </a></p>
         <p><strong>Description:</strong> {{ copy.description }}</p>
         <p><strong>Date:</strong> {{ copy.date }}</p>
+        <button type="button" name="update_event_from_location_button"><a href= "event/{{copy.pk}}/update/">Update Event from Location</a></button>
         <!-- <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p> -->
       {% endfor %}
       {% else %}
