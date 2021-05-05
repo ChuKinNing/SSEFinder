@@ -23,8 +23,8 @@
             <!-- <p class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'b' %}text-danger{% else %}text-warning{% endif %}"> -->
                <!-- {{ copy.get_status_display }}  -->
             <p><strong>Case:</strong> <a href="{{ copy.case.get_absolute_url }}">{{ copy.case }}</a></p>
-            <!-- <p><strong>Event:</strong> {{ copy.event.description }}</p>
-            <p><strong>Event details:</strong> {{ copy.event }}</p> -->
+            <button type="button" name="delete_case_from_event_button"><a href= "attend/{{copy.pk}}/delete/">Remove Case from Event</a></button>
+            <button type="button" name="update_case_from_event_button"><a href= "case/{{copy.case.pk}}/update/">Update Case from Event</a></button>
           {% endif %}
 
       {% endfor %}
