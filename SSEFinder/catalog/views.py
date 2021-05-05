@@ -105,12 +105,11 @@ def LocationView(request):
                                 }
                         location = Location.objects.create(**context)
                         return render(request, 'location_after_input.html', context = context)
-            # when the request is get
             except:
                 context = {}
                 return render(request, 'location_after_input.html', context = context)
+    # get
     else:
-        api_response = None
         context = {
         'form':form,
         }
