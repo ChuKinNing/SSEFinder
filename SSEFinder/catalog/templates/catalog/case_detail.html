@@ -24,6 +24,7 @@
         <!-- <p><strong>Case:</strong> {{ copy.case }}</p> -->
         <p><strong>Event:</strong> <a href="{{ copy.event.get_absolute_url }}">{{ copy.event }} </a></p>
         <p><strong>Location name:</strong><a href="{{ copy.event.location.get_absolute_url }}"> {{ copy.event.location.name }}</a> </p>
+        <button type="button" name="delete_event_from_casebutton"><a href= "attend/{{copy.pk}}/delete/">Delete Event from Case</a></button>
         <!-- <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p> -->
       {% endfor %}
       {% else %}

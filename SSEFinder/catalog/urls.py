@@ -22,4 +22,5 @@ urlpatterns = [
     path('event/<int:pk>/delete/', views.EventDelete.as_view(), name='event-delete'),
     # attend
     path('attend/create/', views.AddAttend, name='attend-create'),
+    path('case/attend/<int:pk>/delete/', views.AttendDelete.as_view(), name='attend-delete'),
 ]

@@ -1,5 +1,21 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <p>Success</p>
+  <h1>Successfully established relationship between Case and Event!</h1>
+  <h1>Case number: {{ case.case_id }}</h1>
+
+  <p><strong>Patient name:</strong>{{ case.name }}</p> <!-- author detail link not yet defined -->
+  <p><strong>HKID:</strong> {{ case.HKID }}</p>
+  <p><strong>Date of Birth:</strong> {{ case.date_of_birth }}</p>
+  <p><strong>Date of Onset:</strong> {{ case.date_of_onset }}</p>
+  <p><strong>Date of Confirmation:</strong> {{ case.date_of_confirmed }}</p>
+  <br>
+  <h1>Event: {{event}}</h1>
+  <!-- <p><strong>Place: </strong>{{event.location}}</p> -->
+  <p><strong>Date: </strong>{{event.date}}</p>
+  <p><strong>Description: </strong>{{event.description}}</p>
+  <p><strong>Address: </strong>{{event.location.address}}</p>
+  <p><strong>Venue:</strong><a href="{{event.location.get_absolute_url }}"> {{ event.location.venue_location }} </a></p>
+  <p><strong>X-coordinate:</strong> {{ event.location.x_coordination }}</p>
+  <p><strong>Y-coordinate:</strong> {{ event.location.y_coordination }}</p>
 {% endblock %}

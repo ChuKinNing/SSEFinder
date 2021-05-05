@@ -177,7 +177,11 @@ def AddAttend(request):
                 calculated_status = 'c'
             new_attend = Attend.objects.create(case=case_selected, event=event_selected, status=calculated_status)
 
-            context = {}
+            context = {
+                'case': case_selected,
+                'event': event_selected,
+                'status': calculated_status
+            }
             return render(request, 'attend_success.html', context = context)
         # if the form is not valid, aka has exception
         else:
@@ -192,3 +196,7 @@ def AddAttend(request):
         }
         return render(request, 'attend_form.html', context = context)
     return render(request, 'attend_form.html', context = context)
+
+class AttendDelete(DeleteView):
+    model = Attend
+    success_url = reverse_lazy('cases')
