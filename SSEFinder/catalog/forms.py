@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from catalog.models import Location, Attend
+from catalog.models import Location, Attend, Case
 from django.utils.translation import ugettext_lazy as _
 import requests
 import json
@@ -47,6 +47,20 @@ class AttendForm(ModelForm):
             'event': _('Choose Event')
         }
 
+
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
 class SseDateForm(forms.Form):
-    start_date = forms.DateField(help_text="Enter a beginning date of the desired period")
-    end_date = forms.DateField(help_text="Enter a ending date of the desired period")
+    start_date = forms.DateField(help_text="Enter a beginning date of the desired period", widget=forms.widgets.DateInput(attrs={'type': 'date'}))
+    end_date = forms.DateField(help_text="Enter a ending date of the desired period", widget=forms.widgets.DateInput(attrs={'type': 'date'}))
+
+class CaseForm(ModelForm):
+    class Meta:
+        model = Case
+        fields = '__all__'
+        widgets = {
+            'date_of_birth':  DateInput(),
+            'date_of_onset': DateInput(),
+            'date_of_confirmed': DateInput()
+        }

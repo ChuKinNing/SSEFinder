@@ -1,4 +1,5 @@
 from django.urls import path
+from django.conf.urls import url
 from . import views
 
 urlpatterns = [
@@ -29,4 +30,6 @@ urlpatterns = [
     path('event/attend/<int:pk>/delete/', views.AttendDelete.as_view(), name='attend-delete'),
     # SSE
     path('sse/select/', views.SelectSse, name = 'sse-select'),
+    #new
+    path('cases/caseSearch/', views.caseSearchView.as_view(),name='case-search'),
 ]

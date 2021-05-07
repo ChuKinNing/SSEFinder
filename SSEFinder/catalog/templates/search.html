@@ -1,0 +1,120 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Case Search List</h1>
+  <form name="Form1" class="caseSearch" method="GET" action="">
+    Case ID: <input id="caseId" class="caseId" type="number" name="searchID" placeholder="Search By Case ID">
+	<button type="submit" name="submit1" onclick="check1();"> Search </button>
+  </form>
+  <br>
+  <h5>OR</h5>
+  <br>
+  <form name="Form" class="caseSearch2" method="GET" action="" >
+    HK ID: <input id="HKId" class="HKId" type="search" name="searchHKID" placeholder="Search By HKID"> 
+    <button type="submit" name="submit2" onclick="check2();"> Search </button>
+  </form>
+  <br>
+  <h5>OR</h5>
+  <br>
+  <p style="font-size:14px; color:#FF0000; font-weight:bold; font-style:italic;">*Leave blank in not applicable</p>
+  <p id="warning" style="font-size:14px; color:#FF0000;"></p>
+  <form name="Form3" class="caseSearch3" method="GET" action="" >
+    Case Onset Date from <input id="dateOnFrom" class="dateFrom" type="date" name="searchOnDateFrom" placeholder="YYYY-MM-DD">
+    to <input id="dateOnTo" class="dateTo" type="date" name="searchOnDateTo" placeholder="YYYY-MM-DD"> AND <br />
+    Case Comfirm Date from <input id="dateComFrom" class="dateFrom" type="date" name="searchComDateFrom" placeholder="YYYY-MM-DD">
+    to <input id="dateComTo" class="dateTo" type="date" name="searchComDateTo" placeholder="YYYY-MM-DD"> AND <br />
+	Age Range from <input id="AgeFrom" class="Age" type="number" name="searchAgeFrom">
+	to <input id="AgeTo" class="Age" type="number" name="searchAgeTo">
+    <button type="submit" name="submit3" onclick="check3()";> Search </button>
+  </form>
+  <br>
+  <h4>Search Result:</h4>
+  {% for case in case_list %}
+    <li>
+      <a href="{{ case.get_absolute_url }}">Case ID: {{ case.case_id }}</a> ({{case.name}})
+    </li>
+  {% empty %}
+      <p>No Result.</p>
+  {% endfor %}
+  
+  <script>
+  function check1(){
+     var caseId = document.getElementById("caseId").value;
+	 if (caseId == ""){
+	    alert("Case Id is empty")
+	 }else{
+	    document.getElementById('form1').submit();
+	 }
+  }
+  
+  function check2(){
+     var HKId = document.getElementById("HKId").value;
+	 if (HKId == ""){
+	    alert("HK Id is empty")
+	 }else{
+	    document.getElementById('form2').submit();
+	 }
+  }
+  
+  function check3(){
+     var dateOnFrom = document.getElementById("dateOnFrom").value;
+	 var dateOnTo = document.getElementById("dateOnTo").value;
+	 var dateComFrom = document.getElementById("dateComFrom").value;
+	 var dateComTo = document.getElementById("dateComTo").value;
+	 var AgeFrom = document.getElementById("AgeFrom").value;
+	 var AgeTo = document.getElementById("AgeTo").value;
+	 var check = true;
+	 
+	 if(dateOnFrom == "" || dateOnTo == ""){
+	     if(dateOnFrom != "" || dateOnTo != ""){
+		    check = false;
+		    alert ("Fill in both Field: Case Onset Date from YYYY-MM-DD to YYYY-MM-DD");
+		 }
+	 }
+	 
+	 if (dateComFrom == "" || dateComTo == ""){
+	     if (dateComFrom != "" || dateComTo != ""){
+		    check = false;
+		    alert ("Fill in both Field: Case Comfirm Date from YYYY-MM-DD to YYYY-MM-DD");
+		 }
+	 }
+	 
+	 if (AgeFrom == "" || AgeTo == ""){
+	     if (AgeFrom != "" || AgeTo != ""){
+		    check = false;
+		    alert ("Fill in both Field: Age Range from X to X");
+		 }
+	 }
+	 
+	 if (dateOnFrom == "" && dateOnTo == "" && dateComFrom == "" && dateComTo == "" && AgeFrom == "" && AgeTo == ""){
+	     check = false;
+		 alert ("All field are empty");
+	 }
+	 
+	 if (dateOnFrom != "" && dateOnTo != ""){
+	    if (new Date(dateOnFrom).getTime() > new Date(dateOnTo).getTime()){
+		   check = false;
+		   alert ("Error: From Date larger than To Date");
+		}
+	 }
+	 
+	 if (dateComFrom != "" && dateComTo != ""){
+	    if (new Date(dateComFrom).getTime() > new Date(dateComTo).getTime()){
+		   check = false;
+		   alert ("Error: From Date larger than To Date");
+		}
+	 }
+	 
+	 if (AgeFrom != "" && AgeTo != ""){
+	    if (AgeFrom > AgeTo){
+		   check = false;
+		   alert ("Error: From Age larger than To Age");
+		}
+	 }
+	 
+	 if (check == true){
+	    document.getElementById('form3').submit();
+	 }
+  }
+  </script>
+{% endblock %}

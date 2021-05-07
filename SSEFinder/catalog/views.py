@@ -5,7 +5,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 
 import requests
-from .forms import LocationForm, AttendForm, SseDateForm
+from .forms import LocationForm, AttendForm, SseDateForm, CaseForm
 
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
@@ -49,11 +49,13 @@ class CaseDetailView(generic.DetailView):
 
 class CaseCreate(CreateView):
     model = Case
-    fields = '__all__'
+    # fields = '__all__'
+    form_class = CaseForm
 
 class CaseUpdate(UpdateView):
     model = Case
-    fields = '__all__'
+    # fields = '__all__'
+    form_class = CaseForm
 
 class CaseDelete(DeleteView):
     model = Case
@@ -73,6 +75,56 @@ class LocationDetailView(generic.DetailView):
 class LocationCreate(CreateView):
     model = Location
     fields = ['name']
+
+#new
+class caseSearchView(generic.ListView):
+    model = Case
+    template_name = 'search.html'
+    context_object_name = 'case_list'
+
+    def get_queryset(self):
+       result = super(caseSearchView, self).get_queryset()
+       query = self.request.GET.get('searchID')
+       queryHKid = self.request.GET.get('searchHKID')
+       queryComDateFrom = self.request.GET.get('searchComDateFrom')
+       queryComDateTo = self.request.GET.get('searchComDateTo')
+       queryOnDateFrom = self.request.GET.get('searchOnDateFrom')
+       queryOnDateTo = self.request.GET.get('searchOnDateTo')
+       queryAgeFrom = self.request.GET.get('searchAgeFrom')
+       queryAgeTo = self.request.GET.get('searchAgeTo')
+
+       result = None
+
+       if query:
+          postresult = Case.objects.filter(case_id = query)
+          result = postresult
+          return result
+
+       if queryHKid:
+          postresult = Case.objects.filter(HKID = queryHKid)
+          result = postresult
+          return result
+
+       postresult = Case.objects.all()
+       if queryComDateFrom and queryComDateTo:
+          postresult = postresult.filter(date_of_confirmed__range = [queryComDateFrom,queryComDateTo])
+          result = postresult
+
+       if queryOnDateFrom and queryOnDateTo:
+          postresult = postresult.filter(date_of_onset__range = [queryOnDateFrom,queryOnDateTo])
+          result = postresult
+
+       if queryAgeFrom and queryAgeTo:
+          current_year = date.today().strftime('%Y')
+          timeTo = int(current_year) - int(queryAgeFrom)
+          timeFrom = int(current_year) - int(queryAgeTo)
+          queryTimeFrom = str(timeFrom) + "-01-01"
+          queryTimeTo = str(timeTo) + "-12-31"
+          postresult = postresult.filter(date_of_birth__range = [queryTimeFrom,queryTimeTo])
+          result = postresult
+
+       return result
+#end
 
 def LocationView(request):
     form = LocationForm(None)
