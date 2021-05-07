@@ -6,7 +6,8 @@
   <p><strong>Date: </strong>{{event.date}}</p>
   <p><strong>Description: </strong>{{event.description}}</p>
   <p><strong>Address: </strong>{{event.location.address}}</p>
-  <p><strong>Venue:</strong><a href="{{event.location.get_absolute_url }}"> {{ event.location.venue_location }} </a></p>
+  <p><strong>Venue location:</strong><a href="{{event.location.get_absolute_url }}"> {{ event.location.venue_location }} </a></p>
+  <p><strong>Venue name:</strong> {{ event.location.name }} </p>
   <p><strong>X-coordinate:</strong> {{ event.location.x_coordination }}</p>
   <p><strong>Y-coordinate:</strong> {{ event.location.y_coordination }}</p>
   <button type="button" name="update_button"><a href="{{event.pk}}/update/">Update</a></button>

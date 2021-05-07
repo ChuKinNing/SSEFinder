@@ -30,6 +30,8 @@ urlpatterns = [
     path('event/attend/<int:pk>/delete/', views.AttendDelete.as_view(), name='attend-delete'),
     # SSE
     path('sse/select/', views.SelectSse, name = 'sse-select'),
-    #new
+    #Search
     path('cases/caseSearch/', views.caseSearchView.as_view(),name='case-search'),
+    path('event/search/', views.EventSearch,name='event-search'),
+    path('location/search/', views.LocationSearch,name='location-search'),
 ]

@@ -6,7 +6,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 
 import requests
-from .forms import LocationForm, AttendForm, SseDateForm, CaseForm, EventForm
+from .forms import LocationForm, AttendForm, SseDateForm, CaseForm, EventForm, EventSearchForm
 
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
@@ -178,6 +178,30 @@ class LocationDelete(DeleteView):
     # SSE.objects.filter(event=None).delete()
     success_url = reverse_lazy('locations')
 
+def LocationSearch(request):
+    form = EventSearchForm(None)
+    context = {
+    'form':form,
+    }
+    if request.method == 'POST':
+        form = EventSearchForm(None)
+        if form.is_valid():
+            location = form.cleaned_data['location']
+            date_from = form.cleaned_data['date_from']
+            date_to = form.cleaned_data['date_to']
+            context = {
+                'location': form.cleaned_data['location'],
+                'date_from': form.cleaned_data['date_from'],
+                'date_to': form.cleaned_data['date_to']
+            }
+            events_in_period = Event.objects.filter(date__range=[date_from, date_to])
+    else:
+        context = {
+        'form':form,
+        }
+        return render(request, 'event_search.html', context = context)
+    return render(request, 'event_search.html', context = context)
+
 # Event
 
 class EventListView(generic.ListView):
@@ -201,6 +225,84 @@ class EventDelete(DeleteView):
     # SSE.objects.filter(event=None).delete()
     Attend.objects.filter(event=None).delete()
     success_url = reverse_lazy('events')
+
+def EventSearch(request):
+    form = EventSearchForm(None)
+    if request.method == 'POST':
+        form = EventSearchForm(request.POST or None)
+        if form.is_valid():
+            location_name = form.cleaned_data['location_name']
+            venue_location = form.cleaned_data['venue_location']
+            date_from = form.cleaned_data['date_from']
+            date_to = form.cleaned_data['date_to']
+            events_in_period= []
+
+
+            context = {
+                'form':form,
+                'location_name': form.cleaned_data['location_name'],
+                'venue_location': form.cleaned_data['venue_location'],
+                'date_from': form.cleaned_data['date_from'],
+                'date_to': form.cleaned_data['date_to']
+            }
+
+            # events_in_period = Event.objects.filter(Q(date__range=[date_from, date_to]))
+            # events_in_period = events_in_period.filter(location__venue_location=venue_location)
+            # events_in_period = events_in_period.filter(location__name=location_name)
+            # hv location
+            if location_name == "" and venue_location != "" and date_from == None and date_to == None:
+                events_in_period = Event.objects.filter(location__venue_location=venue_location)
+
+            # hv name
+            elif location_name != "" and venue_location == "" and date_from == None and date_to == None:
+                events_in_period = Event.objects.filter(location__name=location_name)
+
+                # hv date
+            elif location_name == "" and venue_location == "" and date_from != None and date_to != None:
+                events_in_period = Event.objects.filter(Q(date__range=[date_from, date_to]))
+
+                # hv location and date
+            elif location_name == "" and venue_location != "" and date_from != None and date_to != None:
+                events_in_period = Event.objects.filter(Q(date__range=[date_from, date_to]))
+                events_in_period = events_in_period.filter(location__venue_location=venue_location)
+
+                # hv name and date
+            elif venue_location == "" and location_name != "" and date_from != None and date_to != None:
+                events_in_period = Event.objects.filter(Q(date__range=[date_from, date_to]))
+                events_in_period = events_in_period.filter(location__name=location_name)
+
+                # hv location and name
+            elif venue_location != "" and location_name != "" and date_from == None and date_to == None:
+                events_in_period = Event.objects.filter(location__venue_location=venue_location)
+                events_in_period = events_in_period.filter(location__name=location_name)
+
+            # hv all
+            elif venue_location != "" and location_name != "" and date_from != None and date_to != None:
+                events_in_period = Event.objects.filter(Q(date__range=[date_from, date_to]))
+                events_in_period = events_in_period.filter(location__venue_location=venue_location)
+                events_in_period = events_in_period.filter(location__name=location_name)
+
+            result=[]
+
+            for event in events_in_period:
+                result.append(event)
+            context['events']=result
+            return render(request, 'event_search.html', context)
+    # get
+    else:
+        context = {
+        'form':form,
+        }
+        return render(request, 'event_search.html', context = context)
+
+
+    # else:
+    #     context = {
+    #     'form':form,
+    #     }
+    #     print("dllm")
+    #     return render(request, 'event_search.html', context = context)
+    return render(request, 'event_search.html', context = context)
 
 # Attend
 

@@ -29,8 +29,8 @@ class Case(models.Model):
 
 class Location(models.Model):
     """Model for location"""
-    name = models.CharField(max_length=1000, null=True, help_text='Enter name of the location')
-    venue_location = models.CharField(max_length=200, null=True, help_text='Enter the location')
+    name = models.CharField(max_length=1000, null=True, help_text='Enter name of the venue')
+    venue_location = models.CharField(max_length=200, null=True, help_text='Enter the venue location')
     address = models.CharField(max_length=200, null=True, help_text='Enter the address')
     x_coordination = models.FloatField(null=True, help_text='Enter X cordinate of the location')
     y_coordination = models.FloatField(null=True, help_text='Enter Y cordinate of the location')
@@ -87,7 +87,7 @@ class Event(models.Model):
     def __str__(self):
         return f'{self.location.venue_location} ({self.date})'
 
-# 
+#
 #
 #
 # class SSE(models.Model):
