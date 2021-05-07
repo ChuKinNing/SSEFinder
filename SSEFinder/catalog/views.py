@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from catalog.models import Case, Attend, Event, Location, SSE
+from catalog.models import Case, Attend, Event, Location
+# , SSE
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
@@ -174,7 +175,7 @@ class LocationDelete(DeleteView):
     # remove relatate object to Foreign key object
     Event.objects.filter(location=None).delete()
     Attend.objects.filter(event=None).delete()
-    SSE.objects.filter(event=None).delete()
+    # SSE.objects.filter(event=None).delete()
     success_url = reverse_lazy('locations')
 
 # Event
@@ -197,7 +198,7 @@ class EventUpdate(UpdateView):
 
 class EventDelete(DeleteView):
     model = Event
-    SSE.objects.filter(event=None).delete()
+    # SSE.objects.filter(event=None).delete()
     Attend.objects.filter(event=None).delete()
     success_url = reverse_lazy('events')
 

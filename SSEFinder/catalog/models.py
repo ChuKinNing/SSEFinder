@@ -75,7 +75,7 @@ class Event(models.Model):
     # event_name = models.CharField(max_length=200, null=True, help_text='Enter name of the event')
     location = models.ForeignKey('Location', on_delete=models.SET_NULL, null=True)
     description = models.TextField(null=True)
-    date = models.DateField(null=True, help_text='Date of the eventm e.g. YYYY-MM-DD')
+    date = models.DateField(null=True, help_text='Date of the event')
 
     class Meta:
         ordering = ['location', 'date']
@@ -87,14 +87,14 @@ class Event(models.Model):
     def __str__(self):
         return f'{self.location.venue_location} ({self.date})'
 
-
-
-
-class SSE(models.Model):
-    event = models.ForeignKey('Event', on_delete=models.SET_NULL, null=True)
-
-    class Meta:
-        ordering = ['event']
-
-    def __str__(self):
-        return f'{self.event.location.name} ({self.event.date})'
+# 
+#
+#
+# class SSE(models.Model):
+#     event = models.ForeignKey('Event', on_delete=models.SET_NULL, null=True)
+#
+#     class Meta:
+#         ordering = ['event']
+#
+#     def __str__(self):
+#         return f'{self.event.location.name} ({self.event.date})'

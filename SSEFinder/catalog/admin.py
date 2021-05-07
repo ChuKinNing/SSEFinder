@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Case, Location, Attend, Event, SSE
+from .models import Case, Location, Attend, Event
+# , SSE
 
 # Register your models here.
 
@@ -20,6 +21,6 @@ class AttendAdmin(admin.ModelAdmin):
 class EventAdmin(admin.ModelAdmin):
     list_display = ('location', 'date', 'description')
 
-@admin.register(SSE)
-class SSEAdmin(admin.ModelAdmin):
-    list_display = ('event',)
+# @admin.register(SSE)
+# class SSEAdmin(admin.ModelAdmin):
+#     list_display = ('event',)
