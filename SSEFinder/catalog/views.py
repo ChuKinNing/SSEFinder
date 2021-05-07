@@ -5,7 +5,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 
 import requests
-from .forms import LocationForm, AttendForm, SseDateForm, CaseForm
+from .forms import LocationForm, AttendForm, SseDateForm, CaseForm, EventForm
 
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
@@ -187,11 +187,13 @@ class EventDetailView(generic.DetailView):
 
 class EventCreate(CreateView):
     model = Event
-    fields = '__all__'
+    # fields = '__all__'
+    form_class = EventForm
 
 class EventUpdate(UpdateView):
     model = Event
-    fields = '__all__'
+    # fields = '__all__'
+    form_class = EventForm
 
 class EventDelete(DeleteView):
     model = Event

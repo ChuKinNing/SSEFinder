@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from catalog.models import Location, Attend, Case
+from catalog.models import Location, Attend, Case, Event
 from django.utils.translation import ugettext_lazy as _
 import requests
 import json
@@ -63,4 +63,12 @@ class CaseForm(ModelForm):
             'date_of_birth':  DateInput(),
             'date_of_onset': DateInput(),
             'date_of_confirmed': DateInput()
+        }
+
+class EventForm(ModelForm):
+    class Meta:
+        model = Event
+        fields = '__all__'
+        widgets = {
+            'date': DateInput()
         }
