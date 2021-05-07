@@ -6,7 +6,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 
 import requests
-from .forms import LocationForm, AttendForm, SseDateForm, CaseForm, EventForm, EventSearchForm
+from .forms import LocationForm, AttendForm, SseDateForm, CaseForm, EventForm, EventSearchForm, LocationSearchForm
 
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
@@ -179,28 +179,45 @@ class LocationDelete(DeleteView):
     success_url = reverse_lazy('locations')
 
 def LocationSearch(request):
-    form = EventSearchForm(None)
-    context = {
-    'form':form,
-    }
+    form = LocationSearchForm(None)
     if request.method == 'POST':
-        form = EventSearchForm(None)
+        form = LocationSearchForm(request.POST or None)
         if form.is_valid():
-            location = form.cleaned_data['location']
-            date_from = form.cleaned_data['date_from']
-            date_to = form.cleaned_data['date_to']
+            location_name = form.cleaned_data['location_name']
+            venue_location = form.cleaned_data['venue_location']
+            # address = form.cleaned_data['address']
+            location_result= []
+
             context = {
-                'location': form.cleaned_data['location'],
-                'date_from': form.cleaned_data['date_from'],
-                'date_to': form.cleaned_data['date_to']
+                'form':form,
+                'location_name': form.cleaned_data['location_name'],
+                'venue_location': form.cleaned_data['venue_location'],
+                # 'address': form.cleaned_data['address']
             }
-            events_in_period = Event.objects.filter(date__range=[date_from, date_to])
+
+            #hv location
+            if location_name == "" and venue_location !="":
+                location_result=Location.objects.filter(venue_location=venue_location)
+            #hv name
+            elif location_name != "" and venue_location =="":
+                location_result=Location.objects.filter(name=location_name)
+            #hv location and name
+            elif location_name != "" and venue_location !="":
+                location_result=Location.objects.filter(venue_location=venue_location)
+                location_result=location_result.filter(name=location_name)
+
+            result=[]
+            for location in location_result:
+                result.append(location)
+            context['locations']=result
+            return render(request, 'location_search.html',context=context)
+
     else:
         context = {
         'form':form,
         }
-        return render(request, 'event_search.html', context = context)
-    return render(request, 'event_search.html', context = context)
+        return render(request, 'location_search.html', context = context)
+    return render(request, 'location_search.html', context = context)
 
 # Event
 

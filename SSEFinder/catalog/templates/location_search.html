@@ -2,5 +2,21 @@
 
 {% block content %}
   <h1>Location Search List</h1>
-
+  <p>Fill in at lease one of the information to get the results</p>
+  <form action="" method="post">
+    {% csrf_token %}
+    <table>
+    {{ form.as_table }}
+    </table>
+    <input type="submit" value="Submit">
+  </form>
+  <br>
+  <h4>Results:</h4>
+  {% for location in locations %}
+    <li>
+      <a href="{{ location.get_absolute_url }}">{{ location.name }}</a> ({{location.venue_location}}, {{location.address}})
+    </li>
+  {% empty %}
+      <p>No Result.</p>
+  {% endfor %}
 {% endblock %}

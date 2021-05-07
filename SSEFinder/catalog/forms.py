@@ -78,3 +78,8 @@ class EventSearchForm(forms.Form):
     venue_location=forms.CharField(label='Venue location',help_text="Enter the venue location", required = False)
     date_from=forms.DateField(help_text="Enter a beginning date of the desired period", widget=forms.widgets.DateInput(attrs={'type': 'date'}), required = False)
     date_to=forms.DateField(help_text="Enter a ending date of the desired period", widget=forms.widgets.DateInput(attrs={'type': 'date'}), required = False)
+
+class LocationSearchForm(forms.Form):
+    location_name=forms.CharField(label='Location name', help_text="Enter the venue name", required = False)
+    venue_location=forms.CharField(label='Venue location',help_text="Enter the venue location", required = False)
+    # address=forms.CharField(label='Address',help_text="Enter the address", required = False)
